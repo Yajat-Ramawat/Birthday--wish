@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You :)</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Patrick Hand', cursive;
+      background: linear-gradient(135deg, #151525, #1d3557);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Animated stars */
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .stars::before,
+    .stars::after {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background-image: radial-gradient(white 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: moveStars 100s linear infinite;
+      opacity: 0.18;
+    }
+
+    .stars::after {
+      animation-duration: 140s;
+      opacity: 0.1;
+    }
+
+    @keyframes moveStars {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(-500px);
+      }
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease;
+
+      background: rgba(255,255,255,0.03);
+      border: 2px dashed rgba(255,255,255,0.1);
+      margin: 20px;
+      border-radius: 30px;
+      backdrop-filter: blur(6px);
+    }
+
+    section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section::before {
+      content: '';
+      position: absolute;
+      left: 35px;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: rgba(255, 100, 100, 0.25);
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    p {
+      max-width: 700px;
+      font-size: 1.4rem;
+      line-height: 1.7;
+    }
+
+    .side-note {
+      margin-top: 20px;
+      opacity: 0.7;
+      transform: rotate(-2deg);
+      font-size: 1rem;
+    }
+
+    button,
+    a {
+      margin-top: 30px;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(45deg, #ff4d6d, #ff758f);
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+      font-family: 'Patrick Hand', cursive;
+    }
+
+    button:hover,
+    a:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 25px rgba(255, 77, 109, 0.5);
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 20px;
+      margin-top: 25px;
+      max-width: 550px;
+      display: none;
+      animation: fade 0.5s ease;
+      box-shadow: 0 0 20px rgba(0,0,0,0.25);
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .doodle {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.3;
+      user-select: none;
+    }
+
+    .d1 {
+      top: 40px;
+      right: 60px;
+      transform: rotate(10deg);
+    }
+
+    .d2 {
+      bottom: 60px;
+      left: 60px;
+      transform: rotate(-10deg);
+    }
+
+    .comic-strip {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .comic {
+      width: 180px;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 15px;
+      padding: 15px;
+      font-size: 1.1rem;
+      min-height: 140px;
+    }
+
+    .final-card {
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 15px rgba(255,255,255,0.08);
+      }
+      to {
+        box-shadow: 0 0 35px rgba(255,255,255,0.25);
+      }
+    }
+
+    #musicBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+
+    @media(max-width: 700px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+      }
+
+      .comic {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars"></div>
+
+  <audio id="bgMusic" loop>
+    <source src="andriig-happy-birthday-471211.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="musicBtn" onclick="toggleMusic()">🎵 Play Music</button>
+
+  <!-- Section 1 -->
+  <section class="show">
+    <div class="doodle d1">✏️</div>
+    <div class="doodle d2">:)</div>
+
+    <h1>Hey Tiya!</h1>
+
+    <p>
+      I made this little thing for you…<br>
+    </p>
+
+    <p class="side-note">
+      (Hope you'll like it :) )
+    </p>
+
+    <a href="#sec2">Continue</a>
+  </section>
+
+  <!-- Section 2 -->
+  <section id="sec2">
+    <div class="doodle d1">🧸</div>
+    <div class="doodle d2">;P</div>
+
+    <h1>The Era of Simple Days</h1>
+
+    <p>
+      Life used to feel smaller somehow.<br>
+      Random conversations, laughing at dumb things…<br><br>
+
+      Back then we probably didn’t realize
+      those moments would become memories.
+    </p>
+
+    <p class="side-note">
+      (We were definitely more chaotic back then.)
+    </p>
+    
+    <a href="#sec3">Continue</a>
+  </section>
+
+  <!-- Section 3 -->
+  <section id="sec3">
+    <div class="doodle d2">☁️    :/</div>
+
+    <h1>Things Got Weird After a While</h1>
+
+    <p>
+      Life became busier.<br>
+      Different routines. Different schedules.<br><br>
+
+      Life got chaotic somehow,
+      but the memories stayed :)
+    </p>
+
+    <p class="side-note">
+      (Very rude of life honestly.)
+    </p>
+    <a href="#sec4">Continue</a>
+  </section>
+
+  <!-- Section 4 -->
+  <section id = "sec4">
+
+    <h1>Random Memories 💭:D</h1>
+    <div class="doodle d1">😅</div>
+
+    <div class="buttons">
+      <button onclick="showMemory(0)">Simple days</button>
+      <button onclick="showMemory(1)">Little things</button>
+      <button onclick="showMemory(2)">Old times</button>
+    </div>
+
+    <div id="memoryText" class="card"></div>
+    <a href="#sec5">Continue</a>
+
+  </section>
+
+  <!-- Section 5 -->
+  <section id="sec5">
+
+    <h1>One Last Thing… 💌</h1>
+
+    <p>
+      No matter how far life takes us,<br>
+      some connections never really fade.<br><br>
+
+      And I’m glad ours is one of them. :)
+    </p>
+
+    <button onclick="showFinal()">Click Here</button>
+
+    <div id="finalMessage" class="card final-card">
+      <h2>Happy Birthday 🎂</h2>
+      <h2>And a Sweet 17 <3</h2>
+      <br>
+
+      I just wanted to say that I’m really grateful
+      for the memories we share.<br><br>
+
+      Even if life changes,
+      some people remain important anyway.<br><br>
+
+      I hope you stay happy,
+      keep smiling,
+      and do amazing in life.<br><br>
+
+      Wherever life takes you…<br>
+      take care, always.
+    </div>
+
+  </section>
+    <!-- Created by: AI bola toh >:( -->
+    <!-- Aggar over dramatic hua...samajh lena formality ke liye likha hai...heh 😅 -->
+  <script>
+
+    const memories = [
+      "All those simple days we spent together somehow became some of my favorite memories.",
+
+      "The little random things from back then still make me smile sometimes.",
+
+      "Funny how ordinary days become important later."
+    ];
+
+    function showMemory(index) {
+      const box = document.getElementById('memoryText');
+      box.style.display = 'block';
+      box.innerText = memories[index];
+    }
+
+    function showFinal() {
+      document.getElementById('finalMessage').style.display = 'block';
+    }
+
+    const sections = document.querySelectorAll('section');
+
+    window.addEventListener('scroll', () => {
+      sections.forEach(sec => {
+        const top = sec.getBoundingClientRect().top;
+
+        if(top < window.innerHeight - 100) {
+          sec.classList.add('show');
+        }
+      });
+    });
+
+    const music = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+
+    function toggleMusic() {
+      if(music.paused) {
+        music.play();
+        musicBtn.innerText = '⏸ Pause Music';
+      } else {
+        music.pause();
+        musicBtn.innerText = '🎵 Play Music';
+      }
+    }
+
+  </script>
+
+</body>
+</html>
